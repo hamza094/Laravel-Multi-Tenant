@@ -10,7 +10,7 @@ use App\Models\Task;
 
 class TaskController extends Controller
 {
-        public function index()
+    public function index()
     {
         $tasks = Task::with('project')->get();
 
