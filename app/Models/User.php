@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'current_tenant_id',
     ];
 
     /**
@@ -46,5 +47,10 @@ class User extends Authenticatable
     public function tenants()
     {
         return $this->belongsToMany(Tenant::class);
+    }
+
+    public function tenant()
+    {
+        return $this->belongsTo(Tenant::class);
     }
 }
