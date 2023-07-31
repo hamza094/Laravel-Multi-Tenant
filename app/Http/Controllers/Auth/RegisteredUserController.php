@@ -35,6 +35,8 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'subdomain' => ['required', 'alpha', 'unique:tenants,subdomain'],
+
         ]);
 
         $user = User::create([
@@ -43,7 +45,11 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        $tenant = Tenant::create(['name' => $request->name . ' Team']);
+        $tenant = Tenant::create([
+            'name' => $request->name . ' Team',
+            'subdomain' => $request->subdomain
+        ]);
+
         $tenant->users()->attach($user->id);
         $user->update(['current_tenant_id' => $tenant->id]);
 
@@ -51,6 +57,12 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(RouteServiceProvider::HOME);
+        //return redirect(RouteServiceProvider::HOME);
+
+
+    $tenantDomain = 'http://' . $request->subdomain . '.multi.test';
+
+    return redirect($tenantDomain . RouteServiceProvider::HOME);
+
     }
 }

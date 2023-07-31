@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Providers\RouteServiceProvider;
+
 
 class TenantController extends Controller
 {
@@ -14,7 +16,8 @@ class TenantController extends Controller
         // Change tenant
         auth()->user()->update(['current_tenant_id' => $tenantID]);
 
-        // Redirect to dashboard
-        return redirect()->route('dashboard');
+        $tenantDomain = str_replace('://', '://' . $tenant->subdomain . '.', config('app.url'));
+        
+        return redirect($tenantDomain . RouteServiceProvider::HOME);
     }
 }
