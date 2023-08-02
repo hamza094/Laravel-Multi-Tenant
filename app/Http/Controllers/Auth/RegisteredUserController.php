@@ -50,19 +50,20 @@ class RegisteredUserController extends Controller
             'subdomain' => $request->subdomain
         ]);
 
-        $tenant->users()->attach($user->id);
+        $tenant->users()->attach($user->id, ['is_owner' => true]);
+        
         $user->update(['current_tenant_id' => $tenant->id]);
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        //return redirect(RouteServiceProvider::HOME);
+        return redirect(RouteServiceProvider::HOME);
 
 
-    $tenantDomain = 'http://' . $request->subdomain . '.multi.test';
+    //$tenantDomain = 'http://' . $request->subdomain . '.multi.test';
 
-    return redirect($tenantDomain . RouteServiceProvider::HOME);
+    //return redirect($tenantDomain . RouteServiceProvider::HOME);
 
     }
 }
