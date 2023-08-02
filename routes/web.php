@@ -36,7 +36,7 @@ Route::middleware('auth')->group(function () {
          
     Route::resource('users', \App\Http\Controllers\UserController::class)
         ->only('index', 'store')
-        ->middleware('can:manage_users')
+        ->middleware('can:manage_users');
 });
 
 require __DIR__.'/auth.php';
