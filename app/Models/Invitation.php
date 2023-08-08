@@ -11,4 +11,9 @@ class Invitation extends Model
 
     protected $fillable = ['tenant_id', 'email', 'token', 'accepted_at'];
 
+    public function tenant()
+    {
+        return $this->belongsTo(Tenant::class);
+    }
+
 }

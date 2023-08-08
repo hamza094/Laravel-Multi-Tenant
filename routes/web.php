@@ -37,6 +37,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('users', \App\Http\Controllers\UserController::class)
         ->only('index', 'store')
         ->middleware('can:manage_users');
+
+    Route::get('invitations/{token}', [\App\Http\Controllers\UserController::class, 'acceptInvitation'])
+    ->name('invitations.accept');    
 });
 
 require __DIR__.'/auth.php';

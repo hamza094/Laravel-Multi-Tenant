@@ -16,7 +16,7 @@ class TenantController extends Controller
         // Change tenant
         auth()->user()->update(['current_tenant_id' => $tenantID]);
 
-        $tenantDomain = str_replace('://', '://' . $tenant->subdomain . '.', config('app.url'));
+        /*$tenantDomain = str_replace('://', '://' . $tenant->subdomain . '.', config('app.url'));*/
         
         return redirect($tenantDomain . RouteServiceProvider::HOME);
     }
