@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreUserRequest;
 use App\Notifications\SendInvitationNotification;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Notification;
 use App\Models\Invitation;
 use Illuminate\Support\Str;
@@ -13,7 +14,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $invitations = Invitation::latest()->get();
+        $invitations = Invitation::where('tenant_id', auth()->user()->current_tenant_id)->latest()->get();
 
         return view('users.index', compact('invitations'));
     }
@@ -34,14 +35,23 @@ class UserController extends Controller
 
      public function acceptInvitation($token)
     {
-       $invitation = Invitation::where('token', $token)
+          $invitation = Invitation::with('tenant')
+            ->where('token', $token)
             ->whereNull('accepted_at')
             ->firstOrFail();
 
         if (auth()->check()) {
-            // assign a user
+            $invitation->update(['accepted_at' => now()]);
+
+            auth()->user()->tenants()->attach($invitation->tenant_id);
+
+            auth()->user()->update(['current_tenant_id' => $invitation->tenant_id]);
+
+        //return redirect(RouteServiceProvider::HOME);
+
         } else {
-            // redirect to register
+        return redirect()->route('register', ['token' => $invitation->token]);
+
         }
     }
 }
