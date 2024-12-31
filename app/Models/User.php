@@ -44,13 +44,4 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function tenants()
-    {
-      return $this->belongsToMany(Tenant::class)->withPivot('is_owner');
-    }
-
-    public function tenant()
-    {
-        return $this->belongsTo(Tenant::class);
-    }
 }

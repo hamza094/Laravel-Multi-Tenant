@@ -8,7 +8,7 @@ use App\Traits\FilterByTenant;
 
 class Task extends Model
 {
-    use HasFactory,FilterByTenant;
+    use HasFactory;
 
     protected $guarded = [];
 

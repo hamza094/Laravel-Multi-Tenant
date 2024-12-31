@@ -51,7 +51,7 @@ class RegisteredUserController extends Controller
 
         $email = $request->email;
          
-         if ($request->token) {
+         /*if ($request->token) {
             $invitation = Invitation::with('tenant')
                 ->where('token', $request->token)
                 ->whereNull('accepted_at')
@@ -62,7 +62,7 @@ class RegisteredUserController extends Controller
             }
 
             $email = $invitation->email;
-        } 
+        }*/ 
 
         $user = User::create([
             'name' => $request->name,
@@ -72,7 +72,7 @@ class RegisteredUserController extends Controller
 
         $subdomain = $request->subdomain;
 
-        if($invitation){
+        /*if($invitation){
             $invitation->update(['accepted_at' => now()]);
 
             $invitation->tenant->users()->attach($user->id);
@@ -92,7 +92,7 @@ class RegisteredUserController extends Controller
         
         $user->update(['current_tenant_id' => $tenant->id]);
 
-        }
+        }*/
 
 
         event(new Registered($user));
